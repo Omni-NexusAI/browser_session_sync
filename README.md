@@ -1,5 +1,9 @@
 # Browser Session Sync
 
+Startup migration and agent initialization install the native runtime adapter
+synchronously, matching Agent Zero's dispatchers. Asynchronous initialization
+hooks prevent boot or agent creation even when the runtime adapter passes tests.
+
 Browser Session Sync keeps recovery snapshots of Agent Zero Browser tabs,
 cookies and localStorage. On Agent Zero 2.11, native persistence owns the
 shared sign-in profile and normal tab restoration.

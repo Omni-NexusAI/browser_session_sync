@@ -1,11 +1,28 @@
 import asyncio
 import contextvars
+import importlib
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 from usr.plugins.browser_session_sync.helpers import session_sync as sync, native_adapter
 from test_session_sync import FakeCore, FakePage, write_snapshot
+
+
+@pytest.mark.parametrize("point,class_name", [
+    ("startup_migration", "BrowserSessionNativeStartup"),
+    ("agent_init", "BrowserSessionNativeAgent"),
+])
+def test_initialization_hooks_run_through_host_synchronous_dispatcher(monkeypatch, point, class_name):
+    from helpers import extension
+    module = importlib.import_module(
+        f"usr.plugins.browser_session_sync.extensions.python.{point}._45_browser_session_native")
+    patched = []
+    monkeypatch.setattr(native_adapter, "patch_runtime", lambda: patched.append(True))
+    monkeypatch.setattr(extension, "_get_extension_classes", lambda *args, **kwargs: [getattr(module, class_name)])
+    monkeypatch.setattr(extension, "_log_extension_call", lambda *args: None)
+    extension.call_extensions_sync(point, None)
+    assert patched == [True]
 
 
 @pytest.fixture

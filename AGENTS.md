@@ -26,6 +26,7 @@ This plugin persists native Agent Zero Browser tabs, cookies, and localStorage a
 
 - Run `python -m pytest tests` in an Agent Zero-compatible Python environment.
 - Tests must stub host config writes and use temporary snapshot directories; `tests/conftest.py` provides that boundary. Never run fixture settings against the deployed plugin.
+- Startup migration and agent initialization use the host synchronous dispatcher: both `execute` methods must be synchronous and return no awaitable. Test through `call_extensions_sync`, not only the runtime adapter.
 - Verify a hard restart restores tabs when the Browser panel subscribes.
 - Close a restored tab, restart again, and confirm it stays closed.
 - Confirm typing emits one character per keypress and routine browsing produces sparse saves.
