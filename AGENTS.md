@@ -24,6 +24,8 @@ This plugin persists native Agent Zero Browser tabs, cookies, and localStorage a
 
 ## Verification
 
+- `TODO.md` records deferred startup-performance and saved-session history work; publication does not authorize implementing those follow-ups.
+
 - Run `python -m pytest tests` in an Agent Zero-compatible Python environment.
 - Tests must stub host config writes and use temporary snapshot directories; `tests/conftest.py` provides that boundary. Never run fixture settings against the deployed plugin.
 - Startup migration and agent initialization use the host synchronous dispatcher: both `execute` methods must be synchronous and return no awaitable. Test through `call_extensions_sync`, not only the runtime adapter.
